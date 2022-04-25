@@ -11,6 +11,7 @@ public class Logic {
     public void setExpression(String expression) { this.expression = expression; }
 
     public static double calculate(final String str) {
+        try {
         return new Object() {
             int pos = -1, ch;
 
@@ -36,37 +37,30 @@ public class Logic {
 
             double parseExpression() {
                 double x = parseTerm();
-                for (;;) {
-                    if      (eat('+')) {
+                for (; ; ) {
+                    if (eat('+')) {
                         Addition add = new Addition(x, parseTerm());
                         x = add.calculate();
-                    }
-                    else if (eat('-')) {
-                            Subtraction subtract = new Subtraction(x, parseTerm());
-                            x = subtract.calculate();
-                        }
-                    else return x;
+                    } else if (eat('-')) {
+                        Subtraction subtract = new Subtraction(x, parseTerm());
+                        x = subtract.calculate();
+                    } else return x;
                 }
             }
 
             double parseTerm() {
                 double x = parseFactor();
-                for (;;) {
-                    if      (eat('*')) {
+                for (; ; ) {
+                    if (eat('*')) {
                         Multiplication multiply = new Multiplication(x, parseTerm());
                         x = multiply.calculate();
-                }
-                    else if (eat('/')) {
+                    } else if (eat('/')) {
                         Division divide = new Division(x, parseTerm());
                         x = divide.calculate();
-                    }
-
-                    else if (eat('%')) {
+                    } else if (eat('%')) {
                         Modulus modulus = new Modulus(x, parseTerm());
                         x = modulus.calculate();
-                    }
-
-                    else return x;
+                    } else return x;
                 }
             }
 
@@ -92,13 +86,18 @@ public class Logic {
                         x = parseFactor();
                     }
                     //if new functions added (sqrt, sin, cos...) add new if statements below
-                    if(!func.equals("")) throw new RuntimeException("Unknown function: " + func);
+                    if (!func.equals("")) throw new RuntimeException("Unknown function: " + func);
                 } else {
-                    throw new RuntimeException("Unexpected: " + (char)ch);
+                    throw new RuntimeException("Unexpected character");
                 }
 
                 return x;
             }
         }.parse();
+
+    } catch(Exception e) {
+            System.out.println(e);
+            return 0;
+        }
     }
 }
