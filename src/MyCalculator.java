@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MyCalculator {
-    private JPanel numbers, operationsPanel, output, mainPanel, otherOperations;
+    private JPanel numbers, operationsPanel, output, mainPanel, otherOperations, underNumbers, allNumbers;
     private JTextArea text;
     private JFrame frame;
     private String operations[];
@@ -20,6 +20,8 @@ public class MyCalculator {
         numbers = new JPanel(new GridLayout(3,3));
         output = new JPanel();
         mainPanel = new JPanel(new BorderLayout());
+        underNumbers = new JPanel(new GridLayout(1,2));
+        allNumbers = new JPanel(new BorderLayout());
 
         numbers.setSize(150, 150);
         numbers.setBackground(Color.white);
@@ -39,7 +41,9 @@ public class MyCalculator {
         otherOperations = new JPanel(new GridLayout(3,1));
         addOtherButtons();
 
-        mainPanel.add(numbers, BorderLayout.WEST);
+        allNumbers.add(numbers, BorderLayout.CENTER);
+        allNumbers.add(underNumbers, BorderLayout.SOUTH);
+        mainPanel.add(allNumbers, BorderLayout.WEST);
         mainPanel.add(output, BorderLayout.NORTH);
         mainPanel.add(operationsPanel, BorderLayout.EAST);
         mainPanel.add(otherOperations, BorderLayout.CENTER);
@@ -48,6 +52,7 @@ public class MyCalculator {
         frame.setSize(250 + 60*operations.length/4, 300);
 //        frame.pack();
         frame.setVisible(true);
+        frame.setResizable(false);
     }
 
     private void addOtherButtons() {
@@ -94,9 +99,8 @@ public class MyCalculator {
         }
     }
 
-
     private void addNumberButtons() {
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 10; ++i) {
             JButton button = new JButton(Integer.toString(i));
             button.addActionListener(new ActionListener()  {
                 @Override
@@ -106,6 +110,23 @@ public class MyCalculator {
             });
             numbers.add(button);
         }
+        JButton zero = new JButton("0");
+        zero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setText(getText() + zero.getText());
+            }
+        });
+        JButton coma = new JButton(".");
+        coma.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setText(getText() + coma.getText());
+            }
+        });
+
+        underNumbers.add(zero);
+        underNumbers.add(coma);
     }
 
     private String getText() {

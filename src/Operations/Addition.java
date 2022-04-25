@@ -1,6 +1,6 @@
 package Operations;
 
-public class Addition implements OperationInterface {
+public class Addition {
 
     private double num1;
     private double num2;
